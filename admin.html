@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clerk Dashboard</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; padding-top: 20vh; background-color: #2c3e50; color: white; }
+        button { 
+            font-size: 40px; 
+            padding: 30px 60px; 
+            background-color: #e74c3c; 
+            color: white; 
+            border: none; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+        button:active { transform: scale(0.95); background-color: #c0392b; }
+    </style>
+</head>
+<body>
+    <h1>Accounts Office Terminal</h1>
+    <p>Click the button below or press <b>Spacebar</b> to call the next student.</p>
+    
+    <button onclick="advanceQueue()">CALL NEXT STUDENT</button>
+
+    <script>
+        // 1. The function that talks to your Python server
+        function advanceQueue() {
+            fetch('/api/advance', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => console.log("Success:", data.message))
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 2. The Keyboard Shortcut Silencer
+        document.addEventListener('keydown', function(event) {
+            // Check if the key pressed is Spacebar (32) or Enter (13)
+            if (event.keyCode === 32 || event.keyCode === 13) {
+                event.preventDefault(); // Stop the browser from double-clicking
+                advanceQueue();         // Trigger the function once
+            }
+        });
+    </script>
+</body>
+</html>
